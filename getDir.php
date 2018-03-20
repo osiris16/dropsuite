@@ -2,7 +2,7 @@
 
 header('Content-Type: application/json');
 $namePost = $_POST["name"];
-$dir = "/data/".$namePost;
+$dir = "/".$namePost;
 $a = scandir($dir);
 $nestedData = array(); 
 

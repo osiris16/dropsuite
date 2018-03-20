@@ -2,7 +2,7 @@
 
 
 $fileName = $_GET["filename"];
-$dir = "/data/".$fileName;
+$dir = "/".$fileName;
 
 $fh = fopen($dir,"r");
  
