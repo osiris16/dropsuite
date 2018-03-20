@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Test DropSuite</title>
+  
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  
+  <link rel="stylesheet" href="asset/css/bootstrap.min.css">
+   <link rel="stylesheet" href="asset/css/AdminLTE.css">
+   <link rel="stylesheet" href="asset/css/font-awesome.css">
+  
+</head>
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+  
+  <!-- Left side column. contains the logo and sidebar -->
+  
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Dashboard
+        <small>Control panel</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-lg-8">
+         <button type="button" class="btn btn-back" style="background: none" ><p class="fa fa-arrow-circle-left fa-fw"></p></button>
+        
+      </div>
+        <div class="col-lg-8" id="pageContent">
+         <div class="input-group margin">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default DoAct" >Action</button>
+                </div>
+                <p class="form-control">....</p>
+          </div>
+          
+        </div>
+        <div class="col-lg-4" id="viewFile">
+          
+
+        </div>
+      </div>
+  
+    </section>
+  </div>
+  
+  <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      <b>Test</b> dropsuite
+    </div>
+    <strong> Taufik Indra</strong>
+  </footer>
+
+</div>
+
+<script src="asset/js/jquery.min.js"></script>
+
+<!-- <script src="asset/js/jquery-ui.min.js"></script> -->
+
+
+
+<script src="asset/js/bootstrap.min.js"></script>
+
+
+
+<script type="text/javascript">
+  var _pageContain = $("#pageContent").html();
+  var _namingDir = [];
+  
+  function getDir(obj){
+
+    var _namePost = "";
+    if(obj){
+      _namePost = obj;
+    }
+    $.post("getDir.php",
+    {
+        name: _namePost
+       
+    },
+    function(data, status){
+      if(status){
+        
+        $("#pageContent").html("");
+        for (var i = 0;data.length > i; i++) {
+          
+              var dk =  _pageContain;
+          if(data[i]["type"] == 0){
+            dk = dk.replace("Action", "<i class='fa fa-folder-open-o fa-fw'></i>")
+             dk = dk.replace("DoAct", "get-dir");
+          }else{
+             dk = dk.replace("Action", "<i class='fa fa-file fa-fw'></i>")
+            dk = dk.replace("DoAct", "get-file");
+          }
+
+          dk = dk.replace("....",data[i]["name"]);
+           $("#pageContent").append(dk)
+        }
+        
+      }
+       $(".get-dir").click(function(){
+          var kkk = $(this);
+          var _K = kkk.parent().parent();
+          var toDir = _K.children().last().html();
+          _namingDir.push(toDir);
+            getDir(dirFormNaming());
+        })
+       $(".get-file").click(function(){
+            var kkk = $(this);
+            var _K = kkk.parent().parent();
+            var toFile = _K.children().last().html();
+            var _fileName = dirFormNaming()+toFile;
+         window.open("/dropsuite/getFile.php?filename="+_fileName);
+       })
+      }
+     
+    );
+  }
+
+  function dirFormNaming(){
+    var _ret = "";
+    for (var i = 0; i < _namingDir.length; i++) {
+      if(_ret != ""){
+        _ret = _ret+"/"+_namingDir[i]+"/";
+      }else{
+        _ret = _namingDir[i]+"/";
+      }
+      
+    }
+    return _ret;
+  }
+  $(document).ready(function(){
+    getDir();
+  })
+  $(".btn-back").click(function (){
+      _namingDir.pop();
+      getDir(dirFormNaming);
+  })
+
+
+
+</script>
+
+</body>
+</html>
